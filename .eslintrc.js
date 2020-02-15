@@ -14,5 +14,11 @@ module.exports = {
     curly: "error",
     eqeqeq: "error",
     indent: ["error", 2, { SwitchCase: 1 }]
-  }
+  },
+  overrides: [
+    {
+      files: ["**/*.tsx"],
+      rules: { "react/prop-types": "off" }
+    }
+  ]
 };
