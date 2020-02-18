@@ -79,3 +79,63 @@ export const getCircle: any = (circle: {Block: [], Setting: []}) => {
     return { data: {}, error: true };
   }
 };
+
+export const getAd: any = (h24m: {Block: object[]}) => {
+  try {
+    if (Array.isArray(h24m['Block'])) {
+      return { data: h24m['Block'].map((value: any) => {
+        const BlockId = value['BlockId'] ? value['BlockId'] : '';
+        if ((parseInt(BlockId) >= 4 && parseInt(BlockId) <= 6) || (parseInt(BlockId) >= 40 && parseInt(BlockId) <= 46)) {
+          const image = value['Nodes'] && value['Nodes'][0] && value['Nodes'][0]['Img'] && value['Nodes'][0]['Img']['Src'] ? value['Nodes'][0]['Img']['Src'] : '';
+          const title = value['Nodes'] && value['Nodes'][0] && value['Nodes'][0]['Img'] && value['Nodes'][0]['Img']['Title'] ? value['Nodes'][0]['Img']['Title'] : '';
+          const url =  value['Nodes'] && value['Nodes'][0] && value['Nodes'][0]['Link'] && value['Nodes'][0]['Link']['Url'] ? value['Nodes'][0]['Link']['Url'] : '';
+
+          return {
+            image: image,
+            title: filterHtmlTag(htmlEntities(title)),
+            url: ((url[0]) ? (url !== null && url[0] === '/') ? 'https:' : '' : '') + url,
+            pos: 1 };
+        }
+        else if ((parseInt(BlockId) >= 7 && parseInt(BlockId) <= 9) || (parseInt(BlockId) >= 52 && parseInt(BlockId) <= 58)) {
+          const image = value['Nodes'] && value['Nodes'][0] && value['Nodes'][0]['Img'] && value['Nodes'][0]['Img']['Src'] ? value['Nodes'][0]['Img']['Src'] : '';
+          const title = value['Nodes'] && value['Nodes'][0] && value['Nodes'][0]['Img'] && value['Nodes'][0]['Img']['Title'] ? value['Nodes'][0]['Img']['Title'] : '';
+          const url =  value['Nodes'] && value['Nodes'][0] && value['Nodes'][0]['Link'] && value['Nodes'][0]['Link']['Url'] ? value['Nodes'][0]['Link']['Url'] : '';
+
+          return {
+            image: image,
+            title: filterHtmlTag(htmlEntities(title)),
+            url: ((url[0]) ? (url !== null && url[0] === '/') ? 'https:' : '' : '') + url,
+            pos: 2 };
+        }
+        else if ((parseInt(BlockId) >= 19 && parseInt(BlockId) <= 21) || (parseInt(BlockId) >= 59 && parseInt(BlockId) <= 65)) {
+          const image = value['Nodes'] && value['Nodes'][0] && value['Nodes'][0]['Img'] && value['Nodes'][0]['Img']['Src'] ? value['Nodes'][0]['Img']['Src'] : '';
+          const title = value['Nodes'] && value['Nodes'][0] && value['Nodes'][0]['Img'] && value['Nodes'][0]['Img']['Title'] ? value['Nodes'][0]['Img']['Title'] : '';
+          const url =  value['Nodes'] && value['Nodes'][0] && value['Nodes'][0]['Link'] && value['Nodes'][0]['Link']['Url'] ? value['Nodes'][0]['Link']['Url'] : '';
+
+          return {
+            image: image,
+            title: filterHtmlTag(htmlEntities(title)),
+            url: ((url[0]) ? (url !== null && url[0] === '/') ? 'https:' : '' : '') + url,
+            pos: 3 };
+        }
+      }).filter((element: any) => element !== undefined)
+        .sort((a: any, b: any) => a.pos - b.pos), error: false };
+    } else {
+      return { data: [], error: true };
+    }
+  } catch (e) {
+    return { data: [], error: true };
+  }
+}
+
+export const getCategory: any = (category: object[]) => {
+  try {
+    if (Array.isArray(category)) {
+      return { data: category, error: false };
+    } else {
+      return { data: [], error: true };
+    }
+  } catch (e) {
+    return { data: [], error: true };
+  }
+};

@@ -7,11 +7,14 @@ import "../../assets/styles.css";
 const Banner: React.FC<{ data?: { data?: object[] } }> = ({ data }) => {
   const banner = data && data.data ? data.data : [];
   const [index, setIndex] = useState(1);
-  const settings = {};
+  const settings = {
+    initialSlide: 0,
+    autoplay: true
+  };
 
   return (
     <div>
-      <Slider {...settings} afterChange={(i: number):void => setIndex(i + 1)}>
+      <Slider {...settings} afterChange={(i: number): void => setIndex(i + 1)}>
         {banner.map((item: any, i: number) => (
           <div key={i}>
             <a href={item.url}>
