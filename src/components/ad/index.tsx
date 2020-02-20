@@ -11,10 +11,10 @@ const Ad: React.FC<{ data?: { data?: object[] } }> = ({ data }) => {
   }
 
   return (
-    <div> 
+    <div>
       <Slider {...settings}>
         {ad.map((item: any, i: number) => (
-          <div key={i} className="my-4 px-2 text-center">
+          <div key={i} className="my-2 px-2 text-center">
             <a href={item.url}>
               <img src={item.image} alt={item.title} />
             </a>

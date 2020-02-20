@@ -3,7 +3,7 @@ import htmlEntities from '../utils/html-entities-decoder';
 
 export const getServerTime: any = (h24m: {DateTime: string}) => {
   try {
-    return h24m.DateTime.replace(/\/|:| /g, '')
+    return h24m.DateTime.substr(0, 10).replace(/\//g, '')
   } catch (e) {
     return '';
   }
@@ -132,6 +132,44 @@ export const getCategory: any = (category: object[]) => {
   try {
     if (Array.isArray(category)) {
       return { data: category, error: false };
+    } else {
+      return { data: [], error: true };
+    }
+  } catch (e) {
+    return { data: [], error: true };
+  }
+};
+
+export const getThreeOnSale: any = (threeOnSale: any[], hour: number) => {
+  try {
+    if (Array.isArray(threeOnSale[0]['Nodes'])) {  
+      let data = threeOnSale[0]['Nodes'].map(value => {
+        const image = value['Img'] && value['Img']['Src'] ? value['Img']['Src'].replace(/\/\/ec1img.pchome.com.tw/, '//c.ecimg.tw') : '';
+        const url = value['Link'] && value['Link']['Url'] ? value['Link']['Url'].replace(/24h.pc/i, '24h.m.pc') : '';
+        const info = value['Link'] && value['Link']['Text1'] ? value['Link']['Text1'].replace(/<br \/>/g, '\n') : '';
+        const price = value['Link'] && value['Link']['Text2'] ? value['Link']['Text2'] : '';
+        const time = value['ExtraData'] && value['ExtraData']['Time'] ? value['ExtraData']['Time'].substr(0, 5) : '';
+        const name = value['Img'] && value['Img']['Title'] ? value['Img']['Title'].replace(/<br \/>/g, '\n') : '';
+        const path = url.includes('tw/') && url.lastIndexOf('tw/') ? url.substr(url.lastIndexOf('tw/') + 3) : url.includes('jp/') && url.lastIndexOf('jp/') ? url.substr(url.lastIndexOf('jp/') + 3) : url ;
+        const id = path.includes('?') ? path.substring(-1, path.indexOf('?')) : path;
+
+        return {
+          id: id,
+          name:name,
+          image: image,
+          url: url,
+          info: filterHtmlTag(htmlEntities(info)),
+          price: price,
+          time: time };
+      });
+      
+      if (hour >= 15 && hour < 21) { // 15 ~ 21
+        data = [data[1], data[2], data[0]];
+      } else if (hour >= 21 || hour < 10) { // 21 ~ 隔天10
+        data = [data[2], data[0], data[1]];
+      }
+  
+      return { data: data, error: false };
     } else {
       return { data: [], error: true };
     }
