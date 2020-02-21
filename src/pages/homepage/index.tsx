@@ -9,7 +9,8 @@ import {
   getCircle,
   getAd,
   getCategory,
-  getThreeOnSale
+  getThreeOnSale,
+  getCrazyOnSale
 } from "../../api/homepage";
 import "../../assets/styles.css";
 import Header from "../../components/header";
@@ -18,6 +19,7 @@ import PanelBar from "../../components/panelbar";
 import Ad from "../../components/ad";
 import SignList from "../../components/signlist";
 import ThreeOnSale from "../../components/three-onsale";
+import CrazyOnSale from "../../components/crazy-onsale";
 
 const Homepage: React.FC = () => {
   const { data: m24API } = useSWR(API("H24_MOBILE", getTime()), fetchAPI);
@@ -29,8 +31,10 @@ const Homepage: React.FC = () => {
   const [ad, setAd] = useState({});
   const { data: categoryAPI } = useSWR(API("CATEGORY"), fetchAPI);
   const [category, setCategory] = useState({});
-  const { data: threeOnSaleAPI } = useSWR(API("THREEONSALE", getOnSaleTime(m24API)), fetchAPI);
+  const { data: threeOnSaleAPI } = useSWR(API("THREE_ONSALE", getOnSaleTime(m24API)), fetchAPI);
   const [threeOnSale, setThreeOnSale] = useState({});
+  const { data: crazyOnsaleAPI } = useSWR(API("CRAZY_ONSALE", getOnSaleTime(m24API)), fetchAPI);
+  const [crazyOnSale, setCrazyOnSale] = useState({});
 
   useEffect(() => {
     if (m24API) {
@@ -47,18 +51,22 @@ const Homepage: React.FC = () => {
       setCategory(getCategory(categoryAPI)); // 拿分類
     }
     if (threeOnSaleAPI) {
-      setThreeOnSale(getThreeOnSale(threeOnSaleAPI, m24API.DateTime.substr(-8, 2))); // 拿三賞
+      setThreeOnSale(getThreeOnSale(threeOnSaleAPI, parseInt(m24API.DateTime.substr(-8, 2)))); // 拿三賞
     }
-  }, [m24API, bannerAPI, circleAPI, categoryAPI, categoryAPI, threeOnSaleAPI]);
+    if (crazyOnsaleAPI) {
+      setCrazyOnSale(getCrazyOnSale(crazyOnsaleAPI, parseInt(m24API.DateTime.substr(-8, 2)))); // 拿瘋殺
+    }
+  }, [m24API, bannerAPI, circleAPI, categoryAPI, categoryAPI, threeOnSaleAPI, crazyOnsaleAPI]);
 
   return (
-    <div className="bg-gray-100 overflow-x-hidden">
+    <div className="bg-gray-100 overflow-hidden">
       <Header />
       <Banner data={banner1} />
       <PanelBar data={circle} />
       <Ad data={ad} />
       <SignList data={category} />
       <ThreeOnSale data={threeOnSale} />
+      <CrazyOnSale data={crazyOnSale} />
     </div>
   );
 };

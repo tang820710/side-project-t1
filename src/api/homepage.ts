@@ -177,3 +177,38 @@ export const getThreeOnSale: any = (threeOnSale: any[], hour: number) => {
     return { data: [], error: true };
   }
 };
+
+export const getCrazyOnSale: any = (crazyOnSale: any[], hour: number) => {
+  try {
+    if (Array.isArray(crazyOnSale[0]['Nodes'])) {
+      const theHour = (hour >= 10) ? hour : 12; // 早上10點前,用前一天的晚上12點判斷
+      const START = ((((theHour % 6) * 10) + 20) % 60); //到隔日抓21~30筆
+      const COUNT = 10;
+  
+      const data = crazyOnSale[0]['Nodes']
+        .filter((element, i) =>
+          (START <= i && i < START + COUNT) ||
+            (60 + START <= i && i < 60 + START + COUNT) ||
+              (120 + START <= i && i < 120 + START + COUNT)
+        )
+        .map(value => {
+          const image = value['Img2'] && value['Img2']['Src'] ? value['Img2']['Src'].replace(/\/\/ec1img.pchome.com.tw/, '//d.ecimg.tw') : '';
+          const url = value['Link'] && value['Link']['Url'] ? value['Link']['Url'].replace(/24h.pc/i, '24h.m.pc') : '';
+          const info = value['Link'] && value['Link']['Text1'] ? value['Link']['Text1'].replace(/<br \/>/g, '\n').replace(/<[^>]*>/g, '') : '';
+          const price = value['Link'] && value['Link']['Text2'] ? value['Link']['Text2'] : '';
+  
+          return {
+            image: image,
+            url: url,
+            info: filterHtmlTag(htmlEntities(info)),
+            price: price };
+        });
+  
+      return { data: data, error: false };
+    } else {
+      return { data: [], error: true };
+    }
+  } catch (e) {
+    return { data: [], error: true };
+  }
+};

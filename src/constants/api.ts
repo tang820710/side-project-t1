@@ -11,6 +11,8 @@ export const API = (url: string, time?: string): string =>
           ? `${corsAnywhere}http://24h.m.pchome.com.tw/cdn/appindex/data&wt=json&${time}`
           : url === "CATEGORY"
             ? `${corsAnywhere}https://24h.m.pchome.com.tw/cdn/ecapi/ecshop/cateapi/v1.5/sign&site=24h&fields=Id,Name,Sort,Nodes`
-            : url === "THREEONSALE"
+            : url === "THREE_ONSALE"
               ? `${corsAnywhere}https://ecapi.pchome.com.tw/cdn/ecshop/adapi/v5.1/ad&q=welcome&d=${time}&_callback=&&h24`
-              : "";
+              : url === "CRAZY_ONSALE"
+                ? `${corsAnywhere}https://ecapi.pchome.com.tw/cdn/ecshop/adapi/v5/ad&q=onsale&d=${time}&_callback=&&h24`
+                : "";
