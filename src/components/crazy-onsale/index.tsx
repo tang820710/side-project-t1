@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { GiLightningTrio } from "react-icons/gi";
 import { IoIosArrowDropright } from "react-icons/io";
 import "../../assets/styles.css";
 
-interface project {
+interface Project {
   image?: string;
   url?: string;
   info?: string;
@@ -55,9 +55,9 @@ const Title: React.FC<{ title: string; color: string }> = ({ title, color }) => 
   </div>
 );
 
-const List: React.FC<{ project: project[] }> = ({ project }) => (
+const List: React.FC<{ project: Project[] }> = ({ project }) => (
   <div className="flex flex-row overflow-x-auto">
-    {project.map((item: project, i: number) => (
+    {project.map((item: Project, i: number) => (
       <a
         key={i}
         className="inline-block flex-none w-2/5 p-2"

@@ -212,3 +212,22 @@ export const getCrazyOnSale: any = (crazyOnSale: any[], hour: number) => {
     return { data: [], error: true };
   }
 };
+
+export const getScrollText: any = (ad: any[]) => {
+  try {
+    if (Array.isArray(ad[2]['Ads'])) {  
+      return { data: ad[2]['Ads'].map(value => {
+        const text = value['Nodes'] && value['Nodes'][0] && value['Nodes'][0]['Link'] && value['Nodes'][0]['Link']['Text'] ? value['Nodes'][0]['Link']['Text'] : '';
+        const url = value['Nodes'] && value['Nodes'][0] && value['Nodes'][0]['Link'] && value['Nodes'][0]['Link']['Url'] ? value['Nodes'][0]['Link']['Url'] : '';
+  
+        return {
+          text : filterHtmlTag(htmlEntities(text)),
+          url : url };
+      }), error: false };
+    } else {
+      return { data: [], error: true };
+    }
+  } catch (e) {
+    return { data: [], error: true };
+  }
+};
