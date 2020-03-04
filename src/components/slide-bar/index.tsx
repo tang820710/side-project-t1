@@ -2,7 +2,6 @@ import React from "react";
 import { GiSpeaker } from "react-icons/gi";
 import "../../assets/styles.css";
 
-
 const SlideBar: React.FC<{ data?: { data?: object[] } }> = ({ data }) => {
   const slideBar = data && data.data ? data.data : [];
 

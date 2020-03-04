@@ -15,4 +15,6 @@ export const API = (url: string, time?: string): string =>
               ? `${corsAnywhere}https://ecapi.pchome.com.tw/cdn/ecshop/adapi/v5.1/ad&q=welcome&d=${time}&_callback=&&h24`
               : url === "CRAZY_ONSALE"
                 ? `${corsAnywhere}https://ecapi.pchome.com.tw/cdn/ecshop/adapi/v5/ad&q=onsale&d=${time}&_callback=&&h24`
-                : "";
+                : url === "VIDEO"
+                  ? `${corsAnywhere}https://24h.m.pchome.com.tw/cdn/video/collection.htm/data&wt=json&${time}`
+                  : "";

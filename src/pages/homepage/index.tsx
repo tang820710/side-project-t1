@@ -11,7 +11,8 @@ import {
   getCategory,
   getThreeOnSale,
   getCrazyOnSale,
-  getScrollText
+  getScrollText,
+  getVideo
 } from "../../api/homepage";
 import "../../assets/styles.css";
 import Header from "../../components/header";
@@ -22,6 +23,7 @@ import SignList from "../../components/signlist";
 import ThreeOnSale from "../../components/three-onsale";
 import CrazyOnSale from "../../components/crazy-onsale";
 import SlideBar from "../../components/slide-bar";
+import Video from "../../components/video";
 
 const Homepage: React.FC = () => {
   const { data: m24API } = useSWR(API("H24_MOBILE", getTime()), fetchAPI);
@@ -39,6 +41,8 @@ const Homepage: React.FC = () => {
   const [crazyOnSale, setCrazyOnSale] = useState({});
   const [scrollText, setScrollText] = useState({});
   const [ad2, setAd2] = useState({});
+  const { data: videoAPI } = useSWR(API("VIDEO", serverTime), fetchAPI);
+  const [video, setVideo] = useState({});
 
   useEffect(() => {
     if (m24API) {
@@ -62,7 +66,10 @@ const Homepage: React.FC = () => {
     if (crazyOnsaleAPI) {
       setCrazyOnSale(getCrazyOnSale(crazyOnsaleAPI, parseInt(m24API.DateTime.substr(-8, 2)))); // 拿瘋殺
     }
-  }, [m24API, adAPI, circleAPI, categoryAPI, categoryAPI, threeOnSaleAPI, crazyOnsaleAPI]);
+    if (videoAPI) {
+      setVideo(getVideo(videoAPI)); // 拿影音
+    }
+  }, [m24API, adAPI, circleAPI, categoryAPI, categoryAPI, threeOnSaleAPI, crazyOnsaleAPI, videoAPI]);
 
   return (
     <div className="bg-gray-100 overflow-hidden">
@@ -75,6 +82,7 @@ const Homepage: React.FC = () => {
       <CrazyOnSale data={crazyOnSale} />
       <SlideBar data={scrollText} />
       <Ad data={ad2} />
+      <Video data={video} />
     </div>
   );
 };

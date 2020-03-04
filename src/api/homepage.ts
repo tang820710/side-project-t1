@@ -231,3 +231,15 @@ export const getScrollText: any = (ad: any[]) => {
     return { data: [], error: true };
   }
 };
+
+export const getVideo: any = (video: any[]) => {
+  try {
+    if (video instanceof Error) {
+      return { data: [], error: true };
+    } else {
+      return { data: video, error: false };
+    }
+  } catch (e) {
+    return { data: [], error: true };
+  }
+};
