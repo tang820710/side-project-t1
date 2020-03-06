@@ -19,7 +19,6 @@ interface Video {
 
 const Video: React.FC<{ data?: { data?: object[] } }> = ({ data }) => {
   const video = data && data.data ? data.data : [];
-  console.log('video: ', video);
 
   return (
     <div className="bg-white">
@@ -28,7 +27,7 @@ const Video: React.FC<{ data?: { data?: object[] } }> = ({ data }) => {
         {video.map((item: Video, i: number) => (
           <div key={i} className="flex flex-col flex-none w-4/5 px-2 pt-2">
             <a className="relative inline-block">
-              <FaRegPlayCircle size="2.5rem" className="absolute inset-1/2"/>
+              <FaRegPlayCircle size="2.5rem" className="absolute inset-1/2" />
               <img
                 src={`//e.ecimg.tw${item.Pic}`}
                 alt={item.Name}

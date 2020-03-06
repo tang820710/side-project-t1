@@ -12,7 +12,8 @@ import {
   getThreeOnSale,
   getCrazyOnSale,
   getScrollText,
-  getVideo
+  getVideo,
+  getActivitySale
 } from "../../api/homepage";
 import "../../assets/styles.css";
 import Header from "../../components/header";
@@ -24,6 +25,9 @@ import ThreeOnSale from "../../components/three-onsale";
 import CrazyOnSale from "../../components/crazy-onsale";
 import SlideBar from "../../components/slide-bar";
 import Video from "../../components/video";
+import ActivitySale from "../../components/activity-sale";
+//hostsale太亂 跳過
+
 
 const Homepage: React.FC = () => {
   const { data: m24API } = useSWR(API("H24_MOBILE", getTime()), fetchAPI);
@@ -43,11 +47,13 @@ const Homepage: React.FC = () => {
   const [ad2, setAd2] = useState({});
   const { data: videoAPI } = useSWR(API("VIDEO", serverTime), fetchAPI);
   const [video, setVideo] = useState({});
+  const [activitySale, setActivitySale] = useState({});
 
   useEffect(() => {
     if (m24API) {
       setServerTime(getServerTime(m24API)); // 拿時間
       setAd1(getAd(m24API)); // 拿第一個橫幅廣告
+      setActivitySale(getActivitySale(m24API))
     }
     if (adAPI) {
       setBanner(getBanner(adAPI, 0)); // 拿Banner
@@ -83,6 +89,7 @@ const Homepage: React.FC = () => {
       <SlideBar data={scrollText} />
       <Ad data={ad2} />
       <Video data={video} />
+      <ActivitySale data={activitySale} />
     </div>
   );
 };

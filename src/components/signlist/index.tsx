@@ -8,7 +8,7 @@ const SignList: React.FC<{ data?: { data?: object[] } }> = ({ data }) => {
 
   return (
     <div className="flex items-center bg-white border-b overflow-hidden">
-      <div className="sticky whitespace-pre overflow-x-auto">
+      <div className="whitespace-pre overflow-x-auto">
         <div
           className={`inline-block px-4 py-3 text-gray-700 ${focus === -1 ? "border-b-2 border-red-600" : null}`}
           onClick={():void => setFocus(-1)}

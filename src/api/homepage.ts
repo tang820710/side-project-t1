@@ -243,3 +243,75 @@ export const getVideo: any = (video: any[]) => {
     return { data: [], error: true };
   }
 };
+
+export const getActivitySale = (h24m: {Block: object[]}) => {
+  try {
+    if (Array.isArray(h24m['Block'])) {
+      const possibleId = ['14', '15', '16', '17', '18', '47', '48', '49', '50', '51'];
+      const blcokId = Array.from(new Set(
+        h24m['Block'].map((index: any) => {
+          const temp = index['BlockId'] ? index['BlockId'].substr(0, 2) : '';
+          return temp;
+        })
+          .filter(index => possibleId.includes(index))
+      ));
+  
+      return {
+        data: blcokId.map(id => {
+          let ad, title, data;
+          h24m['Block'].forEach((value: any) => {
+            if(value['BlockId']) {
+              if(value['BlockId'] === `${id}-1`) {
+                const image = value['Nodes'] && value['Nodes'][0] && value['Nodes'][0]['Img'] && value['Nodes'][0]['Img']['Src'] ? value['Nodes'][0]['Img']['Src'].replace(/\/\/a.ecimg.tw/, '') : '';
+                const title = value['Nodes'] && value['Nodes'][0] && value['Nodes'][0]['Img'] && value['Nodes'][0]['Img']['Title'] ? value['Nodes'][0]['Img']['Title'] : '';
+                const url = value['Nodes'] && value['Nodes'][0] && value['Nodes'][0]['Link'] && value['Nodes'][0]['Link']['Url'] ? value['Nodes'][0]['Link']['Url'] : '';
+                const path = url.includes('tw/') && url.lastIndexOf('tw/') ? url.substr(url.lastIndexOf('tw/') + 3) : url.includes('jp/') && url.lastIndexOf('jp/') ? url.substr(url.lastIndexOf('jp/') + 3) : url ;
+                const id = path.includes('?') ? path.substring(-1, path.indexOf('?')) : path;
+
+                ad = {
+                  id:id,
+                  image: image,
+                  title: filterHtmlTag(htmlEntities(title)),
+                  url: ((url[0]) ? (url !== null && url[0] === '/') ? 'https:' : '' : '') + url
+                };
+              }
+              else if(value['BlockId'] === `${id}-2`) {
+                const image = value['Nodes'] && value['Nodes'][0] && value['Nodes'][0]['Img'] && value['Nodes'][0]['Img']['Src'] ? value['Nodes'][0]['Img']['Src'].replace(/\/\/a.ecimg.tw/, '') : '';
+                const titleVal = value['Nodes'] && value['Nodes'][0] && value['Nodes'][0]['Link'] && value['Nodes'][0]['Link']['Text'] ? value['Nodes'][0]['Link']['Text'] : '';
+  
+                title = {
+                  image: image,
+                  title: filterHtmlTag(htmlEntities(titleVal))
+                };
+              }
+              else if(value['BlockId'] === `${id}-3`) {
+                const dataArr = value['Nodes'] ? value['Nodes'] : [];
+  
+                data = dataArr.map((item: any) => {
+                  const image = item['Img'] && item['Img']['Src'] ? item['Img']['Src'].replace(/\/\/a.ecimg.tw/, '') : '';
+                  const title = item['Link'] && item['Link']['Text'] ? item['Link']['Text'] : '';
+                  const price = item['Link'] && item['Link']['Text1'] ? item['Link']['Text1'] : '';
+                  const slogan = item['Link'] && item['Link']['Text3'] ? item['Link']['Text3'] : '';
+                  const url = item['Link'] && item['Link']['Url'] ? item['Link']['Url'] : '';
+  
+                  return {
+                    image: image,
+                    title: filterHtmlTag(htmlEntities(title)),
+                    price: price,
+                    slogan: filterHtmlTag(htmlEntities(slogan)),
+                    url: url
+                  };
+                });
+              }
+            }
+          });
+  
+          return {ad, title, data};
+        }), error: false };
+    } else {
+      return { data: [], error: true };
+    }
+  } catch (e) {
+    return { data: [], error: true };
+  }
+};
